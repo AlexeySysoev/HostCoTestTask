@@ -5,6 +5,8 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
+import java.util.HashMap;
+
 public class ProfilePage {
     @FindBy(how = How.XPATH, using = ".//a[text()='Разное']")
     SelenideElement otherButton;
@@ -23,9 +25,47 @@ public class ProfilePage {
     SelenideElement saveButtonHealthRecordForm;
     @FindBy(how = How.XPATH, using = ".//div[contains(@class,'ui-toast-message-content')]//div[text()='Успешно']")
     SelenideElement popupSuccessMessage;
+    @FindBy(how = How.XPATH, using = ".//div[@class='row mychildren ng-star-inserted']//a[contains(text(),'Удалить')]")
+    SelenideElement deleteIndicatorButton;
+    @FindBy(how = How.XPATH, using = ".//div[@class='row mychildren ng-star-inserted']//a[contains(text(),'Редактировать')]")
+    SelenideElement editIndicatorButton;
+    @FindBy(how = How.XPATH, using = ".//div[contains(@class,'ui-dialog-footer')]//button[contains(text(),'Да')]")
+    SelenideElement yesDeleteConfirmButton;
+    @FindBy(how = How.XPATH, using = ".//div[contains(@class,'ui-dialog-footer')]//button[contains(text(),'Нет')]")
+    SelenideElement noDeleteConfirmButton;
+    @FindBy(how = How.XPATH, using = ".//div[contains(@class,'ui-dialog-content')]//input[contains(@class,'create-date')]")
+    SelenideElement editTimeOfIndicator;
+    // для инпутов редактирования записи
+    @FindBy(how = How.XPATH, using = ".//div[contains(@class,'ui-dialog-content')]//div[contains(@class,'ui-g-6')]//input")
+    SelenideElement editIndicatorInput;
+    //для текстэрии редактирования записи
+    @FindBy(how = How.XPATH, using = ".//div[contains(@class,'ui-dialog-content')]//div[contains(@class,'ui-g-6')]//textarea")
+    SelenideElement editIndicatorTextArea;
 
     public void otherButtonClick(){
         otherButton.click();
+    }
+
+    public SelenideElement getEditIndicatorTextArea(){
+        return editIndicatorTextArea;
+    }
+    public SelenideElement getEditIndicatorInput(){
+        return editIndicatorInput;
+    }
+    public SelenideElement getEditTimeOfIndicator(){
+        return editTimeOfIndicator;
+    }
+    public SelenideElement getNoDeleteConfirmButton(){
+        return noDeleteConfirmButton;
+    }
+    public SelenideElement getYesDeleteConfirmButton(){
+        return yesDeleteConfirmButton;
+    }
+    public SelenideElement getEditIndicatorButton(){
+        return editIndicatorButton;
+    }
+    public SelenideElement getDeleteIndicatorButton(){
+        return deleteIndicatorButton;
     }
     public SelenideElement getPopupSuccessMessage(){
         return popupSuccessMessage;
@@ -39,19 +79,30 @@ public class ProfilePage {
     public SelenideElement getSaveButtonHealthRecordForm(){
         return saveButtonHealthRecordForm;
     }
-    public void setAllIndicatorInputs(){
+    public void deleteIndicatorFromStory(){
+        getDeleteIndicatorButton().click();
+        getYesDeleteConfirmButton().click();
+    }
+    public void setEditIndicatorValue(String value){
+        if (getEditIndicatorInput().isDisplayed()) {
+            getEditIndicatorInput().setValue(value);
+        } else if (getEditIndicatorTextArea().isDisplayed()) {
+            getEditIndicatorTextArea().setValue(value);
+        } else System.out.println("Нет поля для ввода значения!");
+    }
+    public void setAllIndicatorInputs(HashMap<String,String> testData){
         recordIndicatorButton.click();
-        setTemperatureInput("366");
-        setWeightInput("90");
-        setPressure1("120");
-        setPressure2("70");
-        setSugarLevel("235");
-        setPulse("100");
-        setAlcoholLevel("4");
-        setAmbivalention("55");
-        setMood("Напряженно приподнятое");
-        setGeneralHealthLevel("нормальное здоровое состояние");
-        setSkinCondition("кожные покровы чистые");
+        setTemperatureInput(testData.get("temperature"));
+        setWeightInput(testData.get("weight"));
+        setPressure1(testData.get("pressure1"));
+        setPressure2(testData.get("pressure2"));
+        setSugarLevel(testData.get("sugar"));
+        setPulse(testData.get("pulse"));
+        setAlcoholLevel(testData.get("alcohol"));
+        setAmbivalent(testData.get("ambivalent"));
+        setMood(testData.get("mood"));
+        setGeneralHealthLevel(testData.get("generalHealthLevel"));
+        setSkinCondition(testData.get("skinCondition"));
         getSaveButtonHealthRecordForm().click();
     }
     public void setTemperatureInput(String temperature){
@@ -75,7 +126,7 @@ public class ProfilePage {
     public void setAlcoholLevel(String alcoholLevel){
         indicatorInputs.get(6).setValue(alcoholLevel);
     }
-    public void setAmbivalention(String ambivalention){
+    public void setAmbivalent(String ambivalention){
         indicatorInputs.get(7).setValue(ambivalention);
     }
     public void setMood(String mood){

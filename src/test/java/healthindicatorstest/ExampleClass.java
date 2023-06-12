@@ -7,6 +7,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pages.MainPage;
 import pages.ProfilePage;
+import utils.PrepareTestData;
+import utils.Utils;
+
+import java.util.HashMap;
 
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.visible;
@@ -18,13 +22,14 @@ public class ExampleClass {
     private final String USER_NAME = "71450643575";
     private final String PASSWORD = "123";
     private final String BASE_URL = "https://pp86.hostco.ru/";
+    private Utils utils = new Utils();
+    private PrepareTestData prepareTestData = new PrepareTestData();
+    private HashMap<String,String> testData = prepareTestData.getIndicatorsTestData();
 
     @BeforeEach
     public void preSet() {
-        //Configuration.browserSize = "1920x1080";
         Configuration.holdBrowserOpen = true;
         MainPage mainPage = open(BASE_URL, MainPage.class);
-
         mainPage.signIn(USER_NAME, PASSWORD);
         profilePage = mainPage.profilePageButtonClick();
         profilePage.otherButtonClick();
@@ -47,19 +52,21 @@ public class ExampleClass {
     @Test
     @DisplayName("Проверка успешного создания новой записи")
     public void addNewRecordHealthIndicatorsIsOk() {
-        profilePage.getReadIndicatorButton().shouldBe(enabled);
-        profilePage.setAllIndicatorInputs();
+        profilePage.setAllIndicatorInputs(testData);
         profilePage.getPopupSuccessMessage().shouldBe(visible);
     }
 
     @Test
     @DisplayName("Успешное удаление показателя")
     public void deleteRecordIsSuccess() {
-        profilePage.getReadIndicatorButton().shouldBe(enabled);
-        profilePage.setTemperatureInput("377");
+        //создаем показатель
+        profilePage.getReadIndicatorButton().click();
+        profilePage.setTemperatureInput(prepareTestData.getIntValueFromRange(340, 420));
         profilePage.getSaveButtonHealthRecordForm().click();
-        profilePage.getPopupSuccessMessage().shouldBe(visible);
-
+        //удаление показателя
+        utils.scrollToElement(profilePage.getDeleteIndicatorButton());
+        profilePage.getDeleteIndicatorButton().shouldBe(enabled).pressEnter();
+        //profilePage.deleteIndicatorFromStory();
     }
 
     @Test

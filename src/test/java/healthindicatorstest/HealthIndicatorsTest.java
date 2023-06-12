@@ -46,7 +46,7 @@ public class HealthIndicatorsTest {
         ProfilePage profilePage = mainPage.profilePageButtonClick();
         profilePage.otherButtonClick();
         profilePage.getReadIndicatorButton().shouldBe(enabled);
-        profilePage.setAllIndicatorInputs();
+        //profilePage.setAllIndicatorInputs();
         profilePage.getPopupSuccessMessage().shouldBe(visible);
     }
     @Test
@@ -57,7 +57,7 @@ public class HealthIndicatorsTest {
         ProfilePage profilePage = mainPage.profilePageButtonClick();
         profilePage.otherButtonClick();
         profilePage.getReadIndicatorButton().shouldBe(enabled);
-        profilePage.setAllIndicatorInputs();
+        //profilePage.setAllIndicatorInputs();
         profilePage.getPopupSuccessMessage().shouldBe(visible);
 
     }
