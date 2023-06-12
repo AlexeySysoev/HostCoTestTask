@@ -4,8 +4,11 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import utils.Utils;
 
 import java.util.HashMap;
+
+import static com.codeborne.selenide.Condition.enabled;
 
 public class ProfilePage {
     @FindBy(how = How.XPATH, using = ".//a[text()='Разное']")
@@ -14,6 +17,8 @@ public class ProfilePage {
     SelenideElement recordIndicatorButton;
     @FindBy(how = How.XPATH, using = ".//div[contains(@class,'dropdown ui-dropdown')]")
     SelenideElement choiceIndicatorSelector;
+    @FindBy(how = How.XPATH, using = ".//li[contains(@aria-label,'Температура')]")
+    SelenideElement liChoiseIndicatorSelector;
     @FindBy(how = How.XPATH, using = ".//div[contains(@class,'ui-dialog-content')]//div[contains(@class,'ui-g-6')]//input")
     ElementsCollection indicatorInputs;
     @FindBy(how = How.XPATH, using = ".//div[contains(@class,'ui-dialog-content')]//textarea")
@@ -41,11 +46,26 @@ public class ProfilePage {
     //для текстэрии редактирования записи
     @FindBy(how = How.XPATH, using = ".//div[contains(@class,'ui-dialog-content')]//div[contains(@class,'ui-g-6')]//textarea")
     SelenideElement editIndicatorTextArea;
+    @FindBy(how = How.XPATH, using = ".//a[contains(@class,'ui-toast-close-icon')]")
+    SelenideElement closeSuccessPopupButton;
+    @FindBy(how = How.XPATH, using = ".//b[text()='Сохранить']/parent::button")
+    SelenideElement saveButtonEditIndicatorForm;
 
     public void otherButtonClick(){
         otherButton.click();
     }
-
+    public SelenideElement getSaveButtonEditIndicatorForm() {
+        return saveButtonEditIndicatorForm;
+    }
+    public SelenideElement getCloseSuccessPopupButton() {
+        return closeSuccessPopupButton;
+    }
+    public SelenideElement getChoiseIndicatorSelector() {
+        return choiceIndicatorSelector;
+    }
+    public SelenideElement getLiChoiseIndicatorSelector() {
+        return liChoiseIndicatorSelector;
+    }
     public SelenideElement getEditIndicatorTextArea(){
         return editIndicatorTextArea;
     }
@@ -79,8 +99,18 @@ public class ProfilePage {
     public SelenideElement getSaveButtonHealthRecordForm(){
         return saveButtonHealthRecordForm;
     }
+    public void selectIndicatorFromSelector(){
+        getChoiseIndicatorSelector().click();
+        getLiChoiseIndicatorSelector().click();
+    }
+    public void cancelDeletingRecord() {
+        Utils.scrollToElement(getDeleteIndicatorButton());
+        getDeleteIndicatorButton().pressEnter();
+        getNoDeleteConfirmButton().click();
+    }
     public void deleteIndicatorFromStory(){
-        getDeleteIndicatorButton().click();
+        Utils.scrollToElement(getDeleteIndicatorButton());
+        getDeleteIndicatorButton().pressEnter();
         getYesDeleteConfirmButton().click();
     }
     public void setEditIndicatorValue(String value){
@@ -138,4 +168,6 @@ public class ProfilePage {
     public void setSkinCondition(String skinCondition){
         indicatorTextareas.get(2).setValue(skinCondition);
     }
+
+
 }

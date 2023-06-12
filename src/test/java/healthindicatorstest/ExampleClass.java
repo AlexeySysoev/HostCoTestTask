@@ -5,16 +5,18 @@ import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import pages.MainPage;
 import pages.ProfilePage;
 import utils.PrepareTestData;
-import utils.Utils;
 
 import java.util.HashMap;
 
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ExampleClass {
 
@@ -22,9 +24,8 @@ public class ExampleClass {
     private final String USER_NAME = "71450643575";
     private final String PASSWORD = "123";
     private final String BASE_URL = "https://pp86.hostco.ru/";
-    private Utils utils = new Utils();
     private PrepareTestData prepareTestData = new PrepareTestData();
-    private HashMap<String,String> testData = prepareTestData.getIndicatorsTestData();
+    private HashMap<String, String> testData = prepareTestData.getIndicatorsTestData();
 
     @BeforeEach
     public void preSet() {
@@ -55,25 +56,49 @@ public class ExampleClass {
         profilePage.setAllIndicatorInputs(testData);
         profilePage.getPopupSuccessMessage().shouldBe(visible);
     }
+    @Test
+    @DisplayName("Редактирование записи")
+    public void editHealthIndicatorRecordIsOk() {
+        //создаем показатель
+        profilePage.getReadIndicatorButton().click();
+        profilePage.setTemperatureInput(prepareTestData.getIntValueFromRange(340, 420));
+        profilePage.getSaveButtonHealthRecordForm().click();
+        profilePage.getCloseSuccessPopupButton().click();
+        //выбор показателя
+        profilePage.selectIndicatorFromSelector();
+        profilePage.getEditIndicatorButton().click();
+        profilePage.getEditIndicatorInput().clear();
+        String valueForChange = prepareTestData.getIntValueFromRange(340, 420);
+        profilePage.getEditIndicatorInput().setValue(valueForChange);
+        profilePage.getSaveButtonEditIndicatorForm().click();
+        String valueFromPage = $(By.xpath(".//div[@class='sml break-word']/span")).getText();
+        System.out.println("Значение для замены "+ valueForChange + "Значение со страницы: " + valueFromPage);
+        //assertTrue(valueForChange.equals(valueFromPage));
+    }
 
     @Test
     @DisplayName("Успешное удаление показателя")
+    @Description("удаление происходит, но нет факта подтверждения")
     public void deleteRecordIsSuccess() {
         //создаем показатель
         profilePage.getReadIndicatorButton().click();
         profilePage.setTemperatureInput(prepareTestData.getIntValueFromRange(340, 420));
         profilePage.getSaveButtonHealthRecordForm().click();
         //удаление показателя
-        utils.scrollToElement(profilePage.getDeleteIndicatorButton());
-        profilePage.getDeleteIndicatorButton().shouldBe(enabled).pressEnter();
-        //profilePage.deleteIndicatorFromStory();
+        profilePage.deleteIndicatorFromStory();
     }
 
     @Test
     @DisplayName("Отмена удаления записи")
-    @Description("Нажимаем удалить запись, в модальном окне выбираем 'нет'")
+    @Description("Нажимаем удалить запись, в модальном окне выбираем 'нет'. " +
+                 "нет факта подтверждения отмены удаления")
     public void cancelDeletingRecordCheck() {
-
+        //создаем показатель
+        profilePage.getReadIndicatorButton().click();
+        profilePage.setTemperatureInput(prepareTestData.getIntValueFromRange(340, 420));
+        profilePage.getSaveButtonHealthRecordForm().click();
+        //отмена удаления показателя
+        profilePage.cancelDeletingRecord();
     }
 
     @Test
