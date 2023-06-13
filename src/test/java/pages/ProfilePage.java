@@ -2,13 +2,14 @@ package pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import utils.Utils;
 
 import java.util.HashMap;
 
-import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Selenide.$;
 
 public class ProfilePage {
     @FindBy(how = How.XPATH, using = ".//a[text()='Разное']")
@@ -17,6 +18,10 @@ public class ProfilePage {
     SelenideElement recordIndicatorButton;
     @FindBy(how = How.XPATH, using = ".//div[contains(@class,'dropdown ui-dropdown')]")
     SelenideElement choiceIndicatorSelector;
+    @FindBy(how = How.XPATH, using = ".//ul[contains(@class,'ui-dropdown-list')]//li/span")
+    ElementsCollection selectIndicatorItems;
+    @FindBy(how = How.XPATH, using = ".//div[@class='col indicator']/child::div[@class='sml break-word']")
+    ElementsCollection indicatorsFromTablePage;
     @FindBy(how = How.XPATH, using = ".//li[contains(@aria-label,'Температура')]")
     SelenideElement liChoiseIndicatorSelector;
     @FindBy(how = How.XPATH, using = ".//div[contains(@class,'ui-dialog-content')]//div[contains(@class,'ui-g-6')]//input")
@@ -51,76 +56,104 @@ public class ProfilePage {
     @FindBy(how = How.XPATH, using = ".//b[text()='Сохранить']/parent::button")
     SelenideElement saveButtonEditIndicatorForm;
 
-    public void otherButtonClick(){
+    public void otherButtonClick() {
         otherButton.click();
     }
+
+    public ElementsCollection getIndicatorsFromTablePage() {
+        return indicatorsFromTablePage;
+    }
+
+    public ElementsCollection getSelectIndicatorItems() {
+        return selectIndicatorItems;
+    }
+
     public SelenideElement getSaveButtonEditIndicatorForm() {
         return saveButtonEditIndicatorForm;
     }
+
     public SelenideElement getCloseSuccessPopupButton() {
         return closeSuccessPopupButton;
     }
+
     public SelenideElement getChoiseIndicatorSelector() {
         return choiceIndicatorSelector;
     }
+
     public SelenideElement getLiChoiseIndicatorSelector() {
         return liChoiseIndicatorSelector;
     }
-    public SelenideElement getEditIndicatorTextArea(){
+
+    public SelenideElement getEditIndicatorTextArea() {
         return editIndicatorTextArea;
     }
-    public SelenideElement getEditIndicatorInput(){
+
+    public SelenideElement getEditIndicatorInput() {
         return editIndicatorInput;
     }
-    public SelenideElement getEditTimeOfIndicator(){
+
+    public SelenideElement getEditTimeOfIndicator() {
         return editTimeOfIndicator;
     }
-    public SelenideElement getNoDeleteConfirmButton(){
+
+    public SelenideElement getNoDeleteConfirmButton() {
         return noDeleteConfirmButton;
     }
-    public SelenideElement getYesDeleteConfirmButton(){
+
+    public SelenideElement getYesDeleteConfirmButton() {
         return yesDeleteConfirmButton;
     }
-    public SelenideElement getEditIndicatorButton(){
+
+    public SelenideElement getEditIndicatorButton() {
         return editIndicatorButton;
     }
-    public SelenideElement getDeleteIndicatorButton(){
+
+    public SelenideElement getDeleteIndicatorButton() {
         return deleteIndicatorButton;
     }
-    public SelenideElement getPopupSuccessMessage(){
+
+    public SelenideElement getPopupSuccessMessage() {
         return popupSuccessMessage;
     }
-    public SelenideElement getReadIndicatorButton(){
+
+    public SelenideElement getReadIndicatorButton() {
         return recordIndicatorButton;
     }
-    public SelenideElement getDateAndTimeCalendar(){
+
+    public SelenideElement getDateAndTimeCalendar() {
         return dateAndTimeCalendar;
     }
-    public SelenideElement getSaveButtonHealthRecordForm(){
+
+    public SelenideElement getSaveButtonHealthRecordForm() {
         return saveButtonHealthRecordForm;
     }
-    public void selectIndicatorFromSelector(){
+
+    public void selectIndicatorFromSelector(String indicatorName) {
         getChoiseIndicatorSelector().click();
-        getLiChoiseIndicatorSelector().click();
+        $(By.xpath(String.format(".//li[contains(@aria-label,'%s')]", indicatorName))).click();
     }
+
     public void cancelDeletingRecord() {
         Utils.scrollToElement(getDeleteIndicatorButton());
         getDeleteIndicatorButton().pressEnter();
         getNoDeleteConfirmButton().click();
     }
-    public void deleteIndicatorFromStory(){
+
+    public void deleteIndicatorFromStory() {
         Utils.scrollToElement(getDeleteIndicatorButton());
         getDeleteIndicatorButton().pressEnter();
         getYesDeleteConfirmButton().click();
     }
-    public void setEditIndicatorValue(String value){
+
+    public void setEditIndicatorValue(String value) {
         if (getEditIndicatorInput().isDisplayed()) {
             getEditIndicatorInput().setValue(value);
         } else if (getEditIndicatorTextArea().isDisplayed()) {
             getEditIndicatorTextArea().setValue(value);
         } else System.out.println("Нет поля для ввода значения!");
     }
-    public void setAllIndicatorInputs(HashMap<String,String> testData){
+
+    public void setAllIndicatorInputs(HashMap<String, String> testData) {
         recordIndicatorButton.click();
         setTemperatureInput(testData.get("temperature"));
         setWeightInput(testData.get("weight"));
@@ -135,37 +168,48 @@ public class ProfilePage {
         setSkinCondition(testData.get("skinCondition"));
         getSaveButtonHealthRecordForm().click();
     }
-    public void setTemperatureInput(String temperature){
+
+    public void setTemperatureInput(String temperature) {
         indicatorInputs.get(0).setValue(temperature);
     }
-    public void setWeightInput(String weight){
+
+    public void setWeightInput(String weight) {
         indicatorInputs.get(1).setValue(weight);
     }
-    public void setPressure1(String pressure1){
+
+    public void setPressure1(String pressure1) {
         indicatorInputs.get(2).setValue(pressure1);
     }
-    public void setPressure2(String pressure2){
+
+    public void setPressure2(String pressure2) {
         indicatorInputs.get(3).setValue(pressure2);
     }
-    public void setSugarLevel(String sugarLevel){
+
+    public void setSugarLevel(String sugarLevel) {
         indicatorInputs.get(4).setValue(sugarLevel);
     }
-    public void setPulse(String pulse){
+
+    public void setPulse(String pulse) {
         indicatorInputs.get(5).setValue(pulse);
     }
-    public void setAlcoholLevel(String alcoholLevel){
+
+    public void setAlcoholLevel(String alcoholLevel) {
         indicatorInputs.get(6).setValue(alcoholLevel);
     }
-    public void setAmbivalent(String ambivalention){
+
+    public void setAmbivalent(String ambivalention) {
         indicatorInputs.get(7).setValue(ambivalention);
     }
-    public void setMood(String mood){
+
+    public void setMood(String mood) {
         indicatorTextareas.get(0).setValue(mood);
     }
-    public void setGeneralHealthLevel(String healthLevel){
+
+    public void setGeneralHealthLevel(String healthLevel) {
         indicatorTextareas.get(1).setValue(healthLevel);
     }
-    public void setSkinCondition(String skinCondition){
+
+    public void setSkinCondition(String skinCondition) {
         indicatorTextareas.get(2).setValue(skinCondition);
     }
 

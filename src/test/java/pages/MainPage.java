@@ -19,27 +19,34 @@ public class MainPage {
     SelenideElement passwordField;
     @FindBy(how = How.XPATH, using = ".//input[@name = 'login']")
     SelenideElement signInButton;
-    public ProfilePage profilePageButtonClick(){
+
+    public ProfilePage profilePageButtonClick() {
         userMenuButtonClick();
         profilePageButton.click();
         return page(ProfilePage.class);
     }
-    public void userMenuButtonClick(){
+
+    public void userMenuButtonClick() {
         userMenuButton.click();
     }
-    public void loginButtonClick(){
+
+    public void loginButtonClick() {
         loginButton.click();
     }
-    public void setUserNameField(String userName){
+
+    public void setUserNameField(String userName) {
         userNameField.setValue(userName);
     }
-    public void setPasswordField(String password){
+
+    public void setPasswordField(String password) {
         passwordField.setValue(password);
     }
-    public void signInButtonClick(){
+
+    public void signInButtonClick() {
         signInButton.click();
     }
-    public void signIn(String userName, String password){
+
+    public void signIn(String userName, String password) {
         loginButtonClick();
         setUserNameField(userName);
         setPasswordField(password);

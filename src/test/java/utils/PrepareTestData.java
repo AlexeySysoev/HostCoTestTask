@@ -1,7 +1,5 @@
 package utils;
 
-import org.apache.commons.lang3.RandomStringUtils;
-
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Random;
@@ -15,7 +13,7 @@ public class PrepareTestData {
         testIndicatorsData.put("weight", getIntValueFromRange(3, 120));              //3-120
         testIndicatorsData.put("pressure1", getIntValueFromRange(100, 140));         //100-140
         testIndicatorsData.put("pressure2", getIntValueFromRange(60, 80));           //60-80
-        testIndicatorsData.put("sugar", getIntValueFromRange(230,240));             //230-240
+        testIndicatorsData.put("sugar", getIntValueFromRange(230, 240));             //230-240
         testIndicatorsData.put("pulse", getIntValueFromRange(70, 120));              //70-120
         testIndicatorsData.put("alcohol", getIntValueFromRange(3, 5));               //3-5
         testIndicatorsData.put("ambivalent", getIntValueFromRange(50, 60));          //50-60
