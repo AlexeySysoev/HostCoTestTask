@@ -55,9 +55,19 @@ public class ProfilePage {
     SelenideElement closeSuccessPopupButton;
     @FindBy(how = How.XPATH, using = ".//b[text()='Сохранить']/parent::button")
     SelenideElement saveButtonEditIndicatorForm;
+    @FindBy(how = How.XPATH, using = ".//div[@class='pagination']//div[contains(@class,'ui-dropdown-trigger')]")
+    SelenideElement paginationRecordsOnPageSelector;
+    @FindBy(how = How.XPATH, using = ".//div[@class='col indicator']/child::div[@class='sml break-word']")
+    ElementsCollection nameOfIndicatorsFromTablePage;
 
     public void otherButtonClick() {
         otherButton.click();
+    }
+    public ElementsCollection getNameOfIndicatorsFromTablePage() {
+        return nameOfIndicatorsFromTablePage;
+    }
+    public SelenideElement getPaginationRecordsOnPageSelector() {
+        return paginationRecordsOnPageSelector;
     }
 
     public ElementsCollection getIndicatorsFromTablePage() {
